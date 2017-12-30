@@ -1,2 +1,3 @@
 # spaceship
-my first console game
+Basicly its my first simple console game
+just wanted to have remote acces
