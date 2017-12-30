@@ -39,7 +39,7 @@ void clearScreen() //czyszczenie ekranu
     Position.Y = 0;
     SetConsoleCursorPosition(hOut, Position);
 }
-void hidecursor() //naprawa migania
+void hidecursor() //fix for bliking
 {
    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
    CONSOLE_CURSOR_INFO info;
@@ -55,9 +55,9 @@ int playerY=24;
 int enemyX;
 int enemyY=1;
 int shotX,shotY;
-int button; //przycisk do streowania
-int fall=0; //zmienna sterujaca spadamiem
-bool isFlying; //sprawdza czy pocisk jest wystrzelony
+int button; //button used to move
+int fall=0; //var for falling 
+bool isFlying; //to check if shot is flyfing
 int speed;
 
 int main()
@@ -82,7 +82,7 @@ int main()
     system("cls");
     hidecursor();
     bool work =true;
-    while (work) //tworzenie planszy
+    while (work) //drawing board
   {
 
     gotoxy(0,0);
@@ -101,25 +101,25 @@ int main()
         }
         if (HP==0)work=false;
     textColor(255);
-    line(); //robi gorna scianke
+    line(); //upper line
     cout<<endl;
-        for (int i=0;i<=25;i++) //robi scianki boczne
+        for (int i=0;i<=25;i++) //left and right walls 
         {
         cout<<"|";
                 for(int j=0;j<25;j++)
                 {
-                    if(map[j][i] =='x')
+                    if(map[j][i] =='x') //darwing player's positon
                         {
                             textColor(255);
                             cout<<"xx";
                             textColor(7);
                         }
-                        else if(map[j][i] =='e')
+                        else if(map[j][i] =='e') //darwing enemy's positon
                         {   textColor(12);
                             cout<<"oo";
                             textColor(7);
                         }
-                        else if(map[j][i] =='d')
+                        else if(map[j][i] =='d') //darwing shot's positon
                         {   textColor(7);
                             cout<<"ii";
                             textColor(255);
@@ -134,7 +134,7 @@ int main()
                 }
         cout<<"|"<<endl;
         }
-    line();//robi dolna scianke
+    line();//lower line
     textColor(7);
     cout<<endl<<"Punkty ";
     textColor(10);
@@ -158,7 +158,7 @@ int main()
         if (shotY < 2 || ((shotY == enemyY-1 || shotY == enemyY)&& shotX == enemyX))
                 {
                 isFlying=false;
-                if ((shotY == enemyY-1 || shotY == enemyY)&& shotX == enemyX) //gdy enemy zostanie trafiony
+                if ((shotY == enemyY-1 || shotY == enemyY)&& shotX == enemyX) //when enemy got a hit
                  {
                     points++;
                     enemyX = rand()%24;
@@ -179,7 +179,7 @@ int main()
         button=getch();
             switch (button)
             {
-                case 97: //dla klawisza a chodzi w lewo  i odopiedio ustala amunicje
+                case 97: //moving left 
             {
                 if(playerX > 0)
                 {
@@ -196,7 +196,7 @@ int main()
                 }
             }
                 break;
-                case 100: //dla kaliwsza d chodzi w prawo i odopiedio ustala amunicje
+                case 100: //moving right
             {
                 if(playerX < 24)
                 {
@@ -212,7 +212,7 @@ int main()
                 }
             }
                 break;
-                case 119: // dla w strzela
+                case 119: // for shoting
             {
                 if(!isFlying)
                 {
@@ -239,13 +239,13 @@ textColor(10);
     cout<<name;
 textColor(7);
 cout<<endl<<"aby wyjsc wpisz cokolwiek i potwierdz enterem!"<<endl;
-cin>>name; // na wypadek gdy ktos trzyma klawisz, a gra sie konczy
+cin>>name; // in case some1 holds bottom after game over
 
 return 0;
 }
 /*
-x=gracz
+x=player
 e=enemy
-p=puste
-d=strzal
+p=empty
+d=shot
 */
