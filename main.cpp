@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <iostream>
 #include <windows.h>
 #include <time.h>
@@ -51,7 +50,7 @@ void hidecursor() //fix for bliking
 }
 string name = "";
 int HP;
-int points, playerX, playerY, enemyX, enemyY, shotX, shotY, speed;
+int points, playerX, playerY, enemyX, enemyY, shotX, shotY, speed,speedEnemy;
 int button; //button used to move
 int fall; //var for falling 
 bool isFlying; //to check if shot is flyfing
@@ -69,13 +68,13 @@ void menu()
 	cin >> x;
 	if (x == "tak" || x == "TAK" || x == "Tak")
 	{
-		cout << "Podaj predkosc gry od 1 do 100 (zalecane 20)\n";
+		cout << "Podaj predkosc gry od 1 do 100 (zalecane 10)\n";
 		cin >> speed;
 
 		if (speed < 1 || speed > 100)
 		{
-			cout << name << ", glupi jestes? Warotsc speed ustwaiona na 20" << endl;
-			speed = 20;
+			cout << name << ", glupi jestes? Warotsc speed ustwaiona na 10" << endl;
+			speed = 10;
 			Sleep(1000);
 		}
 
@@ -98,12 +97,22 @@ void menu()
 			height = 25;
 			Sleep(1000);
 		}
+		cout << "Podaj predkosc przeciwnika od 1 do 4 (1-superszybka,4 - superwolna, zalecane 2)\n";
+		cin >> speedEnemy;
+
+		if (speedEnemy< 1 || speedEnemy > 4)
+		{
+			cout << name << ", glupi jestes? Warotsc speedEnemy ustwaiona na 2" << endl;
+			speedEnemy = 2;
+			Sleep(1000);
+		}
 	}
 	else
 	{
 		height = 25;
 		width = 25;
 		speed = 20;
+		speedEnemy = 2;
 	}
 }
 
@@ -118,7 +127,7 @@ int main()
 	points = 0;
 	playerX = width / 2;
 	playerY = height - 1;
-	enemyX = rand() % 24;
+	enemyX = rand() % (width - 1);
 	enemyY = 1;
 	shotX = playerX;
 	shotY = playerY - 1;
@@ -130,20 +139,20 @@ int main()
 	{
 
 		gotoxy(0, 0);
-		map[playerX][playerY] = 'x';
+		map[playerX][playerY] = 'x';      //seting players pos
 		map[playerX + 1][playerY] = 'x';
 		map[playerX - 1][playerY] = 'x';
-		map[enemyX][enemyY] = 'e';
-		map[shotX][shotY] = 'd';
+		map[enemyX][enemyY] = 'e';  //seting enemys pos
+		map[shotX][shotY] = 'd';  //seting shot's pos
 
-		if (enemyY == height - 1)
+		if (enemyY == height - 1)  //check if enemy got out of board
 		{
 			map[enemyX][enemyY] = 'p';
 			enemyX = rand() % (width - 1);
 			enemyY = 1 + points;
 			HP--;
 		}
-		if (HP == 0)work = false;
+		if (HP == 0)work = false; //spotinf if hp is 0
 		textColor(255);
 		line(); //upper line
 		cout << endl;
@@ -194,7 +203,7 @@ int main()
 		textColor(10);
 		cout << name;
 		textColor(7);
-		if (fall % 2 == 0)
+		if (fall % speedEnemy == 0) //speed of enemy
 		{
 			map[enemyX][enemyY] = 'p';
 			enemyY++;
@@ -244,7 +253,7 @@ int main()
 			break;
 			case 100: //moving right
 			{
-				if (playerX < 24)
+				if (playerX < (width - 1))
 				{
 					map[playerX][playerY] = 'p';
 					map[playerX + 1][playerY] = 'p';
